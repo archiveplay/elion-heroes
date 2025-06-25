@@ -3,9 +3,9 @@ import { devtools, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 import { createUserSlice, UserSlice } from '@/store/user/userSlice'
 
-export type GameStore = UserSlice
+export type AppStore = UserSlice
 
-const store = create<GameStore>()(
+const store = create<AppStore>()(
   devtools(
     persist(
       immer((...a) => ({
@@ -24,9 +24,9 @@ const store = create<GameStore>()(
   )
 );
 
-const useGameStore = store;
+const useAppStore = store;
 
 export type { Position, Unit, User } from '@/types'
-export { useGameStore, store }
+export { useAppStore, store }
 
 
