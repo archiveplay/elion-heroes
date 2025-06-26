@@ -1,5 +1,3 @@
-import WebApp from "@twa-dev/sdk"
-
 /**
  * Retrieves the Telegram WebApp initialization data from the global context.
  * @returns {string} The initialization data string if available, otherwise mock data.
@@ -9,8 +7,8 @@ export function getTelegramInitData(forceMock: boolean = false): string {
     return getMockInitData();
   }
 
-  const realInitData = WebApp.initData ||
-    window.Telegram?.WebApp?.initData;
+  const realInitData = window.Telegram?.WebApp?.initData;
+  console.log('realInitData', realInitData);
 
   if (realInitData) {
     return realInitData;
@@ -20,7 +18,6 @@ export function getTelegramInitData(forceMock: boolean = false): string {
 }
 
 /**
-<<<<<<< HEAD
  * Returns the mock initialization data for Telegram from environment variables.
  * @returns {string} The mock init data string from VITE_TG_INIT_DATA_MOCK.
  */
