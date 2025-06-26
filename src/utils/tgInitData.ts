@@ -20,6 +20,7 @@ export function getTelegramInitData(forceMock: boolean = false): string {
 }
 
 /**
+<<<<<<< HEAD
  * Returns the mock initialization data for Telegram from environment variables.
  * @returns {string} The mock init data string from VITE_TG_INIT_DATA_MOCK.
  */
