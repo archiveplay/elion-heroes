@@ -1,28 +1,23 @@
-import { getUser } from "@/api/user";
 import { useAppStore } from "@/store";
-// import { useEffect } from "react";
-// import { useGetUser } from "./useGetUser";
+import { useEffect } from "react";
+import { useGetUser } from "./useGetUser";
 
-export async function useAppInit() {
+export function useAppInit() {
   const { setUser, logout } = useAppStore();
 
-  const userData = await getUser();
+  const { isLoading, isError, error, data: user, isSuccess } = useGetUser();
 
-  console.log('useAppInit', userData)
+  useEffect(() => {
+    if (isSuccess && user) {
+      setUser(user);
+    }
+  }, [isSuccess, user, setUser]);
 
-  return userData;
+  useEffect(() => {
+    if (isError && error) {
+      logout();
+    }
+  }, [isError, error, logout]);
 
-  // useEffect(() => {
-  //   if (isSuccess && user) {
-  //     setUser(user);
-  //   }
-  // }, [isSuccess, user, setUser]);
-  //
-  // useEffect(() => {
-  //   if (isError && error) {
-  //     logout();
-  //   }
-  // }, [isError, error, logout]);
-  //
-  // return { isLoading, isError, error }
+  return { isLoading, isError, error }
 }

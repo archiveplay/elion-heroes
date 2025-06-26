@@ -20,21 +20,19 @@ type AppInitProviderProps = {
 }
 
 export function AppInitProvider({ children }: AppInitProviderProps) {
-  const userData = useAppInit();
+  const { isLoading, isError, error } = useAppInit();
 
-  if (!userData) return <span>loading...</span>
+  if (isLoading) {
+    return <AppLoader />;
+  }
 
-  // if (isLoading) {
-  //   return <AppLoader />;
-  // }
-  //
-  // if (isError) {
-  //   return (
-  //     <AppError
-  //       error={error?.toString() || 'Неизвестная ошибка'}
-  //     />
-  //   );
-  // }
+  if (isError) {
+    return (
+      <AppError
+        error={error?.message || 'Неизвестная ошибка'}
+      />
+    );
+  }
 
   return <>{children}</>;
 }

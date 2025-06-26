@@ -4,7 +4,7 @@ import { User } from '@/types'
 
 type QueryState<T> = {
   data?: T
-  error?: unknown
+  error?: Error
   isLoading: boolean
   isSuccess: boolean
   isError: boolean
@@ -12,7 +12,7 @@ type QueryState<T> = {
 
 export function useGetUser(): QueryState<User> {
   const [data, setData] = useState<User | undefined>()
-  const [error, setError] = useState<unknown>()
+  const [error, setError] = useState<Error>()
   const [isLoading, setLoading] = useState(true)
 
   useEffect(() => {
