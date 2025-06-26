@@ -32,7 +32,5 @@ export const createUserSlice: StateCreator<
     set((state) => {
       state.user = null;
       state.isAuthenticated = false;
-      // Также очищаем персонажа при логауте
-      state.character = null;
     }),
 });
