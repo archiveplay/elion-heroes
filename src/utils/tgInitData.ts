@@ -20,23 +20,9 @@ export function getTelegramInitData(forceMock: boolean = false): string {
 }
 
 /**
- * Generates mock Telegram WebApp initialization data for testing purposes.
- * @returns {string} The mock initialization data as a URL-encoded string.
+ * Returns the mock initialization data for Telegram from environment variables.
+ * @returns {string} The mock init data string from VITE_TG_INIT_DATA_MOCK.
  */
 export function getMockInitData(): string {
-  const mockData = {
-    user: JSON.stringify({
-      id: 123456789,
-      first_name: "Test",
-      last_name: "User",
-      username: "testuser",
-      language_code: "en"
-    }),
-    chat_instance: "test_chat_instance",
-    chat_type: "private",
-    auth_date: Math.floor(Date.now() / 1000) + '',
-    hash: "mock_hash"
-  };
-
-  return new URLSearchParams(mockData).toString();
+  return import.meta.env.VITE_TG_INIT_DATA_MOCK
 }
