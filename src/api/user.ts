@@ -8,7 +8,6 @@ const TAG = '[user]'
 export async function authUser(forceMock: boolean = false): Promise<boolean> {
   const initData = getTelegramInitData(forceMock);
 
-  console.log('initData', initData);
   try {
     const response = await api.post("/auth", { initData });
     const { token } = response.data;
