@@ -1,15 +1,12 @@
 import { api } from "@/api"
 import { User } from "@/types"
-import { getTelegramInitData } from "@/utils/tgInitData";
+import { withAuthHeader, withInitDataHeader } from "@/api/utils/headers"
 
 const TAG = '[user]'
 
-// TODO: midleware для auth/with initData
 export async function authUser(forceMock: boolean = false): Promise<boolean> {
-  const initData = getTelegramInitData(forceMock);
-
   try {
-    const response = await api.post("/auth", { initData });
+    const response = await withInitDataHeader(api, forceMock).post("/auth");
     const { token } = response.data;
 
     if (token) {
@@ -25,18 +22,12 @@ export async function authUser(forceMock: boolean = false): Promise<boolean> {
 }
 
 export async function getUser(): Promise<User> {
-  const initData = getTelegramInitData();
-  const headers: Record<string, string> = {};
-
-  const token = localStorage.getItem("token");
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
-  }
-
-  headers['X-Telegram-InitData'] = initData;
-
   try {
-    const response = await api.get("/profile", { headers });
+    const response = await
+      withInitDataHeader(
+        withAuthHeader(api)
+      ).get("/profile");
+
     console.info(`${TAG}: get user data`, response.data);
 
     if (!response.data) {
