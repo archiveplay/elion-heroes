@@ -8,7 +8,6 @@ export function getTelegramInitData(forceMock: boolean = false): string {
   }
 
   const realInitData = window.Telegram?.WebApp?.initData;
-  console.log('realInitData', realInitData);
 
   if (realInitData) {
     return realInitData;

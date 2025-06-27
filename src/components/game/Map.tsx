@@ -4,7 +4,6 @@ import { Mesh } from 'three'
 
 export const Map = () => {
   const map = useGLTF("models/map.glb")
-  console.log('map', map)
 
   useEffect(() => {
     map.scene.traverse((child) => {

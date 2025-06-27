@@ -1,7 +1,9 @@
 import { Environment, OrbitControls, SoftShadows } from "@react-three/drei";
 import { Map } from "@/components/game/Map";
 import { Canvas } from "@react-three/fiber";
+import { PvPGameMode } from "./modes/PvPGameMode";
 
+// TODO: Дальше селектить Map и GameMode
 export function Game() {
   return (
     <div style={{ width: "100%", height: "100vh" }}>
@@ -23,6 +25,7 @@ export function Game() {
         />
         <OrbitControls />
         <Map />
+        <PvPGameMode />
         <Environment preset="sunset" />
       </Canvas>
     </div>
