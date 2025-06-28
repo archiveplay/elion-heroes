@@ -2,12 +2,11 @@ import { useRef } from "react"
 import { Group } from "three"
 import { Warior } from "./units/Warior"
 
-// TODO: types!
 interface CharacterControllProps {
   state: {},
   joystic: {},
   userPlayer: {}
-  key?: number
+  key?: string
 }
 
 export const CharacterControll = (

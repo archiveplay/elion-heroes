@@ -1,10 +1,16 @@
+import { useAppStore } from "@/store";
+import { selectUser } from "@/store/user/userSelectors";
+import { updatePlayerState } from "@/utils/playerState";
 import { insertCoin, Joystick, myPlayer, onPlayerJoin } from "playroomkit"
 import { useEffect, useState } from "react"
-import { CharacterControll } from "../CharacterController"
+import { CharacterControll } from "@/components/game/CharacterController"
+import { GamePlayer } from "@/types/game/unit";
+
+const TAG = '[PvPGameMode]'
 
 export const PvPGameMode = () => {
-  // TODO: types here
-  const [players, setPlayers] = useState<any[]>([])
+  const user = useAppStore(selectUser);
+  const [players, setPlayers] = useState<GamePlayer[]>([])
 
   const start = async () => {
     await insertCoin();
@@ -20,8 +26,15 @@ export const PvPGameMode = () => {
 
       const newPlayer = { state, joystick }
 
-      // TODO: state here
-      state.setState("health", 100);
+      console.info(`${TAG}: player ${user?.username} joined`)
+
+      const player = user?.player
+      if (!player) {
+        console.error(`${TAG}: player does not found in store`)
+        return
+      }
+      updatePlayerState(state, player)
+
       setPlayers((players) => [...players, newPlayer])
 
       state.onQuit(() => {

@@ -1,3 +1,5 @@
+import { Joystick, PlayerState } from "playroomkit"
+
 export interface Position {
   x: number
   z: number
@@ -7,3 +9,7 @@ export interface Position {
 export interface Unit {
 }
 
+export interface GamePlayer {
+  state: PlayerState,
+  joystick: Joystick
+}
