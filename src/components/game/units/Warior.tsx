@@ -1,17 +1,30 @@
-import { Text, useGLTF } from "@react-three/drei"
-import { useMemo, useRef } from "react"
+import { Text, useAnimations, useGLTF } from "@react-three/drei"
+import { useEffect, useMemo, useRef } from "react"
 import { Group } from 'three'
 import { SkeletonUtils } from "three-stdlib"
 
-export const Warior = () => {
+interface WariorProps {
+  animation: string
+}
+
+export const Warior = ({ animation = "Idle" }: WariorProps) => {
   const playerRef = useRef<Group>(null)
+  const group = useRef<Group>(null)
   const { scene, animations } = useGLTF('models/warior.glb')
+
+  const { actions } = useAnimations(animations, group);
+
+  useEffect(() => {
+    actions[animation]?.reset().fadeIn(0.2).play();
+
+    return () => { actions[animation]?.fadeOut(0.2) };
+  }, [animation]);
 
   const clone = useMemo(() => SkeletonUtils.clone(scene), [scene])
 
   return (
-    <group>
-      <primitive ref={playerRef} object={clone} position={[0, 0.5, 0]} rotation={[0, 0, 0]} />
+    <group ref={group}>
+      <primitive ref={playerRef} object={clone} />
 
       {/* HP бар */}
       <Text
@@ -26,3 +39,5 @@ export const Warior = () => {
     </group>
   )
 }
+
+useGLTF.preload("/models/warior.glb");
