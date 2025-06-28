@@ -6,11 +6,10 @@ interface CharacterControllProps {
   state: {},
   joystic: {},
   userPlayer: {}
-  key?: string
 }
 
 export const CharacterControll = (
-  { state, joystic, userPlayer, key, ...props }
+  { state, joystic, userPlayer, ...props }
     : CharacterControllProps) => {
   const group = useRef<Group>(null)
   const character = useRef<Group>(null)
