@@ -17,6 +17,7 @@ export const PvPGameMode = () => {
   }
 
   useEffect(() => {
+    // Start the game. TODO: change the default insertCoin logic later
     start();
     onPlayerJoin((state) => {
       const joystick = new Joystick(state, {
@@ -47,7 +48,7 @@ export const PvPGameMode = () => {
     <>
       {
         players.map(({ state, joystick }, idx) => (
-          <CharacterControll key={state.id} state={state} joystic={joystick} userPlayer={state.id === myPlayer()?.id} position-x={idx * 2} />
+          <CharacterControll key={state.id} state={state} joystick={joystick} userPlayer={state.id === myPlayer()?.id} position-x={idx * 2} />
         ))
       }
     </>
