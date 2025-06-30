@@ -2,7 +2,7 @@ import { useAppStore } from "@/store";
 import { selectUser } from "@/store/user/userSelectors";
 import { updatePlayerState } from "@/utils/playerState";
 import { insertCoin, Joystick, myPlayer, onPlayerJoin } from "playroomkit"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { CharacterControll } from "@/components/game/CharacterController"
 import { GamePlayer } from "@/types/game/unit";
 
@@ -22,7 +22,7 @@ export const PvPGameMode = () => {
     onPlayerJoin((state) => {
       const joystick = new Joystick(state, {
         type: "angular",
-        buttons: [{ id: "attack", label: "attack" }]
+        buttons: [{ id: "next-target", label: "target" }]
       })
 
       const newPlayer = { state, joystick }

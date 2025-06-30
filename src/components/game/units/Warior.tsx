@@ -1,4 +1,4 @@
-import { Text, useAnimations, useGLTF } from "@react-three/drei"
+import { useAnimations, useGLTF } from "@react-three/drei"
 import { useEffect, useMemo, useRef } from "react"
 import { Group } from 'three'
 import { SkeletonUtils } from "three-stdlib"
@@ -25,17 +25,6 @@ export const Warior = ({ animation = "Idle" }: WariorProps) => {
   return (
     <group ref={group}>
       <primitive ref={playerRef} object={clone} />
-
-      {/* HP бар */}
-      <Text
-        position={[0, 2.5, 0]}
-        fontSize={0.3}
-        color="red"
-        anchorX="center"
-        anchorY="middle"
-      >
-        {`${100}/${100}`}
-      </Text>
     </group>
   )
 }

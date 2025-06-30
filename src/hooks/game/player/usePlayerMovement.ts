@@ -2,7 +2,6 @@ import { CameraControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { RapierRigidBody, vec3 } from "@react-three/rapier";
 import { isHost, Joystick, PlayerState } from "playroomkit";
-import { useEffect, useState } from "react";
 import { Group } from "three";
 
 interface UsePlayerMovementProps {
