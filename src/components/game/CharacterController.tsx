@@ -2,7 +2,7 @@ import { useRef, useState } from "react"
 import { Group } from "three"
 import { CapsuleCollider, RapierRigidBody, RigidBody } from "@react-three/rapier"
 import { Warior } from "@/components/game/units/Warior"
-import { isHost, Joystick, myPlayer, PlayerState } from "playroomkit"
+import { isHost, Joystick, PlayerState } from "playroomkit"
 import { CameraControls, Text } from "@react-three/drei"
 import { usePlayerMovement } from "@/hooks/game/player/usePlayerMovement"
 import { usePlayerTarget } from "@/hooks/game/player/usePlayerTarget"
@@ -12,15 +12,16 @@ interface CharacterControllProps {
   state: PlayerState,
   joystick: Joystick,
   userPlayer: boolean,
+  highlight: boolean,
+  setTargetId: any
 }
 
-export const CharacterControll = ({ state, joystick, userPlayer, ...props }: CharacterControllProps) => {
+export const CharacterControll = ({ state, joystick, userPlayer, highlight, setTargetId, ...props }: CharacterControllProps) => {
   const groupRef = useRef<Group>(null)
   const characterRef = useRef<Group>(null)
   const rigidBodyRef = useRef<RapierRigidBody>(null)
   const controlsRef = useRef<CameraControls>(null)
   const [animation, setAnimation] = useState("Idle")
-  const targetId = state.getState("targetId")
 
   const { enemies } = useSaveUnitsRefsToStore({ state, characterRef, rigidBodyRef })
 
@@ -39,7 +40,7 @@ export const CharacterControll = ({ state, joystick, userPlayer, ...props }: Cha
     setAnimation,
     rigidBodyRef,
     enemies,
-    onSetTarget: (id) => state.setState("targetId", id)
+    onSetTarget: setTargetId
   })
 
   return (
@@ -55,8 +56,15 @@ export const CharacterControll = ({ state, joystick, userPlayer, ...props }: Cha
         type={isHost() ? "dynamic" : "kinematicPosition"}
       >
         <group ref={characterRef}>
+          {/* charater model */}
           <Warior animation={animation} />
-          {/* HP бар */}
+
+          {/* highlight targe unit */}
+          {highlight && (
+            <pointLight color="yellow" intensity={1} distance={5} />
+          )}
+
+          {/* HP bar */}
           <Text
             position={[0, 2.5, 0]}
             fontSize={0.3}
@@ -66,18 +74,6 @@ export const CharacterControll = ({ state, joystick, userPlayer, ...props }: Cha
           >
             {`${100}/${100}`}
           </Text>
-          {true && (
-            <Text
-              position={[0, 3.5, 0]}
-              fontSize={0.3}
-              color="red"
-              anchorX="center"
-              anchorY="middle"
-            >
-              {`${state.id} ${targetId}`}
-            </Text>
-          )
-          }
         </group>
         <CapsuleCollider args={[0.7, 0.6]} position={[0, 1.28, 0]} />
       </RigidBody>

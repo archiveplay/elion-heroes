@@ -24,7 +24,7 @@ export function usePlayerTarget({ userPlayer, joystick, setAnimation, rigidBodyR
     if (joystick.isPressed("next-target") && userPlayer) {
       if (Date.now() - lastPress.current > CHANGE_RATE) {
         lastPress.current = Date.now()
-        setAnimation("Combat")
+        // setAnimation("Combat")
 
         const playerWorldPos = vec3(rigidBodyRef.current?.translation())
         if (!playerWorldPos) return
