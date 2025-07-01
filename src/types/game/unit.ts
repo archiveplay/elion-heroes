@@ -18,7 +18,6 @@ export interface GamePlayer {
 }
 
 export interface UnitRefs {
-  characterRef: RefObject<Group>
   rigidBodyRef: RefObject<RapierRigidBody>
 }
 

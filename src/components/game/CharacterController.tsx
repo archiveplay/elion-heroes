@@ -18,15 +18,13 @@ interface CharacterControllProps {
 
 export const CharacterControll = ({ state, joystick, userPlayer, highlight, setTargetId, ...props }: CharacterControllProps) => {
   const groupRef = useRef<Group>(null)
-  const characterRef = useRef<Group>(null)
   const rigidBodyRef = useRef<RapierRigidBody>(null)
   const controlsRef = useRef<CameraControls>(null)
   const [animation, setAnimation] = useState("Idle")
 
-  const { enemies } = useSaveUnitsRefsToStore({ state, characterRef, rigidBodyRef })
+  const { enemies } = useSaveUnitsRefsToStore({ state, rigidBodyRef })
 
   usePlayerMovement({
-    characterRef,
     controlsRef,
     rigidBodyRef,
     joystick,
@@ -55,7 +53,7 @@ export const CharacterControll = ({ state, joystick, userPlayer, highlight, setT
         lockRotations
         type={isHost() ? "dynamic" : "kinematicPosition"}
       >
-        <group ref={characterRef}>
+        <group>
           {/* charater model */}
           <Warior animation={animation} />
 

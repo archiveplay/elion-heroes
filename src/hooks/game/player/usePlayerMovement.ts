@@ -2,12 +2,10 @@ import { CameraControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { RapierRigidBody, vec3 } from "@react-three/rapier";
 import { isHost, Joystick, PlayerState } from "playroomkit";
-import { Group } from "three";
 
 interface UsePlayerMovementProps {
   controlsRef: React.RefObject<CameraControls>
   rigidBodyRef: React.RefObject<RapierRigidBody>
-  characterRef: React.RefObject<Group>
   joystick: Joystick,
   setAnimation: (animationName: string) => void
   state: PlayerState
@@ -22,7 +20,7 @@ interface UsePlayerMovementProps {
  * - Sets the appropriate animation ("Run" or "Idle").
  * - Synchronizes player position in a multiplayer environment.
  */
-export function usePlayerMovement({ controlsRef, rigidBodyRef, characterRef, joystick, setAnimation, state }: UsePlayerMovementProps) {
+export function usePlayerMovement({ controlsRef, rigidBodyRef, joystick, setAnimation, state }: UsePlayerMovementProps) {
   useFrame(() => {
     const ms = state.getState("movementSpeed");
 
@@ -45,9 +43,17 @@ export function usePlayerMovement({ controlsRef, rigidBodyRef, characterRef, joy
     const angle = joystick.angle()
 
     // Handle movement and animation based on joystick input
-    if (joystick.isJoystickPressed() && angle && characterRef.current) {
+    if (joystick.isJoystickPressed() && angle && rigidBodyRef.current) {
       setAnimation("Run")
-      characterRef.current.rotation.y = angle
+
+      // Set rotation using quaternion (y-axis rotation)
+      const quaternion = {
+        x: 0,
+        y: Math.sin(angle / 2),
+        z: 0,
+        w: Math.cos(angle / 2)
+      }
+      rigidBodyRef.current.setRotation(quaternion, true)
 
       const velocity = {
         x: Math.sin(angle) * ms,

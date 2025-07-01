@@ -2,15 +2,13 @@ import { useUnitsStore } from "@/store/game/pvpgame";
 import { RapierRigidBody } from "@react-three/rapier";
 import { myPlayer, PlayerState } from "playroomkit";
 import { useEffect, useMemo } from "react";
-import { Group } from "three";
 
 interface useSaveUnitsRefsToStoreProps {
   state: PlayerState
-  characterRef: React.RefObject<Group>
   rigidBodyRef: React.RefObject<RapierRigidBody>
 }
 
-export const useSaveUnitsRefsToStore = ({ state, characterRef, rigidBodyRef }: useSaveUnitsRefsToStoreProps) => {
+export const useSaveUnitsRefsToStore = ({ state, rigidBodyRef }: useSaveUnitsRefsToStoreProps) => {
   const units = useUnitsStore(state => state.units)
 
   const enemies = useMemo(() =>
@@ -22,13 +20,12 @@ export const useSaveUnitsRefsToStore = ({ state, characterRef, rigidBodyRef }: u
   // Write all units refs to store
   useEffect(() => {
     useUnitsStore.getState().registerPlayer(state.id, {
-      characterRef,
       rigidBodyRef,
     })
     return () => {
       useUnitsStore.getState().unregisterPlayer(state.id)
     }
-  }, [state.id])
+  }, [state.id, rigidBodyRef])
 
   return { units, enemies }
 }
