@@ -1,26 +1,34 @@
 import { useRef, useState } from "react"
 import { Group } from "three"
 import { CapsuleCollider, RapierRigidBody, RigidBody } from "@react-three/rapier"
-import { Warior } from "@/components/game/units/Warior"
 import { isHost, Joystick, PlayerState } from "playroomkit"
-import { CameraControls, Text } from "@react-three/drei"
+import { CameraControls, Text, useAnimations, useGLTF } from "@react-three/drei"
 import { usePlayerMovement } from "@/hooks/game/player/usePlayerMovement"
 import { usePlayerTarget } from "@/hooks/game/player/usePlayerTarget"
 import { useSaveUnitsRefsToStore } from "@/hooks/store/useSaveUnitsRefsToStore"
+import { usePlayerAttack } from "@/hooks/game/player/usePlayerAttack"
+import { PlayerCharacter } from "./units/PlayerCharacter"
+import { useMovementAnimation } from "@/hooks/game/player/useMovementAnimation"
 
 interface CharacterControllProps {
   state: PlayerState,
   joystick: Joystick,
   userPlayer: boolean,
   highlight: boolean,
-  setTargetId: any
+  setTargetId: any,
+  targetId?: string
 }
 
-export const CharacterControll = ({ state, joystick, userPlayer, highlight, setTargetId, ...props }: CharacterControllProps) => {
+export const CharacterControll = ({ state, joystick, userPlayer, highlight, setTargetId, targetId, ...props }: CharacterControllProps) => {
+  const { scene, animations } = useGLTF('models/warior.glb')
   const groupRef = useRef<Group>(null)
+  const characterRef = useRef<Group>(null)
   const rigidBodyRef = useRef<RapierRigidBody>(null)
   const controlsRef = useRef<CameraControls>(null)
   const [animation, setAnimation] = useState("Idle")
+
+  const { actions } = useAnimations(animations, characterRef);
+  const attackAction = actions['Attack'];
 
   const { enemies } = useSaveUnitsRefsToStore({ state, rigidBodyRef })
 
@@ -29,17 +37,31 @@ export const CharacterControll = ({ state, joystick, userPlayer, highlight, setT
     rigidBodyRef,
     joystick,
     state,
+    isCombatMode: !!targetId,
     setAnimation
+  })
+  useMovementAnimation({
+    animation,
+    actions
   })
 
   usePlayerTarget({
     userPlayer,
     joystick,
-    setAnimation,
     rigidBodyRef,
     enemies,
     onSetTarget: setTargetId
   })
+
+  // usePlayerAttack({
+  //   userPlayer,
+  //   rigidBodyRef,
+  //   attackAction,
+  //   range: state.getState("attackRange"),
+  //   hitTime: 0.5,
+  //   target: enemies[targetId!]?.rigidBodyRef,
+  //   state
+  // })
 
   return (
     <group {...props} ref={groupRef}>
@@ -55,7 +77,7 @@ export const CharacterControll = ({ state, joystick, userPlayer, highlight, setT
       >
         <group>
           {/* charater model */}
-          <Warior animation={animation} />
+          <PlayerCharacter ref={characterRef} scene={scene} />
 
           {/* highlight targe unit */}
           {highlight && (

@@ -1,4 +1,5 @@
 import { useUnitsStore } from "@/store/game/pvpgame";
+import { UnitRefs } from "@/types/game/unit";
 import { RapierRigidBody } from "@react-three/rapier";
 import { myPlayer, PlayerState } from "playroomkit";
 import { useEffect, useMemo } from "react";
@@ -11,7 +12,7 @@ interface useSaveUnitsRefsToStoreProps {
 export const useSaveUnitsRefsToStore = ({ state, rigidBodyRef }: useSaveUnitsRefsToStoreProps) => {
   const units = useUnitsStore(state => state.units)
 
-  const enemies = useMemo(() =>
+  const enemies: Record<string, UnitRefs> = useMemo(() =>
     Object.keys(units)
       .filter((id) => id !== myPlayer()?.id)
       .reduce((obj, id) => ({ ...obj, [id]: units[id] }), {}),

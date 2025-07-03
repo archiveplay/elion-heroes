@@ -8,7 +8,6 @@ import { Vector3 } from "three";
 interface UsePlayerTargetProps {
   userPlayer: boolean,
   joystick: Joystick,
-  setAnimation: (animationName: string) => void,
   rigidBodyRef: React.RefObject<RapierRigidBody>
   enemies: Record<string, UnitRefs>,
   onSetTarget: (id: string) => void
@@ -16,7 +15,7 @@ interface UsePlayerTargetProps {
 
 const CHANGE_RATE = 300
 
-export function usePlayerTarget({ userPlayer, joystick, setAnimation, rigidBodyRef, enemies, onSetTarget }: UsePlayerTargetProps) {
+export function usePlayerTarget({ userPlayer, joystick, rigidBodyRef, enemies, onSetTarget }: UsePlayerTargetProps) {
   const lastPress = useRef(0)
   const targetIndex = useRef(0)
 
@@ -24,7 +23,6 @@ export function usePlayerTarget({ userPlayer, joystick, setAnimation, rigidBodyR
     if (joystick.isPressed("next-target") && userPlayer) {
       if (Date.now() - lastPress.current > CHANGE_RATE) {
         lastPress.current = Date.now()
-        // setAnimation("Combat")
 
         const playerWorldPos = vec3(rigidBodyRef.current?.translation())
         if (!playerWorldPos) return

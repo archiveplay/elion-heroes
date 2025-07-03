@@ -56,6 +56,7 @@ export const PvPGameMode = () => {
             userPlayer={state.id === myPlayer()?.id}
             position-x={idx * 2}
             highlight={targetId === state.id}
+            targetId={targetId}
             setTargetId={setTargetId}
           />)
       }

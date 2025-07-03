@@ -8,7 +8,8 @@ interface UsePlayerMovementProps {
   rigidBodyRef: React.RefObject<RapierRigidBody>
   joystick: Joystick,
   setAnimation: (animationName: string) => void
-  state: PlayerState
+  state: PlayerState,
+  isCombatMode: boolean,
 }
 
 /**
@@ -20,7 +21,7 @@ interface UsePlayerMovementProps {
  * - Sets the appropriate animation ("Run" or "Idle").
  * - Synchronizes player position in a multiplayer environment.
  */
-export function usePlayerMovement({ controlsRef, rigidBodyRef, joystick, setAnimation, state }: UsePlayerMovementProps) {
+export function usePlayerMovement({ controlsRef, rigidBodyRef, joystick, setAnimation, isCombatMode, state }: UsePlayerMovementProps) {
   useFrame(() => {
     const ms = state.getState("movementSpeed");
 
@@ -44,7 +45,7 @@ export function usePlayerMovement({ controlsRef, rigidBodyRef, joystick, setAnim
 
     // Handle movement and animation based on joystick input
     if (joystick.isJoystickPressed() && angle && rigidBodyRef.current) {
-      setAnimation("Run")
+      setAnimation(isCombatMode ? "Combat" : "Run")
 
       // Set rotation using quaternion (y-axis rotation)
       const quaternion = {
