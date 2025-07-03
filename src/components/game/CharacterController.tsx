@@ -53,15 +53,15 @@ export const CharacterControll = ({ state, joystick, userPlayer, highlight, setT
     onSetTarget: setTargetId
   })
 
-  // usePlayerAttack({
-  //   userPlayer,
-  //   rigidBodyRef,
-  //   attackAction,
-  //   range: state.getState("attackRange"),
-  //   hitTime: 0.5,
-  //   target: enemies[targetId!]?.rigidBodyRef,
-  //   state
-  // })
+  usePlayerAttack({
+    userPlayer,
+    rigidBodyRef,
+    attackAction,
+    range: state.getState("attackRange"),
+    hitTime: 0.5,
+    target: enemies[targetId!]?.rigidBodyRef,
+    state
+  })
 
   return (
     <group {...props} ref={groupRef}>
