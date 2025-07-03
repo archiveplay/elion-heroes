@@ -13,10 +13,11 @@ interface CharacterControllProps {
   joystick: Joystick,
   userPlayer: boolean,
   highlight: boolean,
-  setTargetId: any
+  setTargetId: any,
+  targetId?: string
 }
 
-export const CharacterControll = ({ state, joystick, userPlayer, highlight, setTargetId, ...props }: CharacterControllProps) => {
+export const CharacterControll = ({ state, joystick, userPlayer, highlight, setTargetId, targetId, ...props }: CharacterControllProps) => {
   const groupRef = useRef<Group>(null)
   const rigidBodyRef = useRef<RapierRigidBody>(null)
   const controlsRef = useRef<CameraControls>(null)
