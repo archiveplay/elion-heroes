@@ -9,13 +9,13 @@ interface useSaveUnitsRefsToStoreProps {
 }
 
 export const useSaveUnitsRefsToStore = ({ state, rigidBodyRef }: useSaveUnitsRefsToStoreProps) => {
-  const units = useUnitsStore(state => state.units)
+  const unitRefs = useUnitsStore(state => state.units)
 
-  const enemies = useMemo(() =>
-    Object.keys(units)
+  const enemyRefs: typeof unitRefs = useMemo(() =>
+    Object.keys(unitRefs)
       .filter((id) => id !== myPlayer()?.id)
-      .reduce((obj, id) => ({ ...obj, [id]: units[id] }), {}),
-    [units]);
+      .reduce((obj, id) => ({ ...obj, [id]: unitRefs[id] }), {}),
+    [unitRefs]);
 
   // Write all units refs to store
   useEffect(() => {
@@ -27,5 +27,5 @@ export const useSaveUnitsRefsToStore = ({ state, rigidBodyRef }: useSaveUnitsRef
     }
   }, [state.id, rigidBodyRef])
 
-  return { units, enemies }
+  return { unitRefs, enemyRefs }
 }

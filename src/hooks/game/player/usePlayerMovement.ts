@@ -44,6 +44,7 @@ export function usePlayerMovement({ controlsRef, rigidBodyRef, joystick, setAnim
 
     // Handle movement and animation based on joystick input
     if (joystick.isJoystickPressed() && angle && rigidBodyRef.current) {
+      console.log('setAnimation RUN')
       setAnimation("Run")
 
       // Set rotation using quaternion (y-axis rotation)
@@ -63,6 +64,7 @@ export function usePlayerMovement({ controlsRef, rigidBodyRef, joystick, setAnim
 
       rigidBodyRef.current?.setLinvel(velocity, true);
     } else {
+      console.log('setAnimation IDLE')
       setAnimation("Idle")
     }
 

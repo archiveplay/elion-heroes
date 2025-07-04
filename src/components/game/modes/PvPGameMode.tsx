@@ -52,6 +52,7 @@ export const PvPGameMode = () => {
           <CharacterControll
             key={state.id}
             state={state}
+            players={players}
             joystick={joystick}
             userPlayer={state.id === myPlayer()?.id}
             position-x={idx * 2}

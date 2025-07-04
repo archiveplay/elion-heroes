@@ -1,6 +1,5 @@
 import { Joystick, PlayerState } from "playroomkit"
 import { RefObject } from "react"
-import { Group } from "three"
 import { RapierRigidBody } from "@react-three/rapier"
 
 export interface Position {

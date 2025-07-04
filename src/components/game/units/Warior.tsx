@@ -1,6 +1,6 @@
 import { useAnimations, useGLTF } from "@react-three/drei"
 import { useEffect, useMemo, useRef } from "react"
-import { Group } from 'three'
+import { Group, LoopOnce } from 'three'
 import { SkeletonUtils } from "three-stdlib"
 
 interface WariorProps {
@@ -13,8 +13,16 @@ export const Warior = ({ animation = "Idle" }: WariorProps) => {
   const { scene, animations } = useGLTF('models/warior.glb')
 
   const { actions } = useAnimations(animations, group);
+  const attackAction = actions["Attack"]
 
+  // if (attackAction) {
+  //   attackAction.loop = LoopOnce;
+  //   attackAction.clampWhenFinished = true;
+  // }
+  //
   useEffect(() => {
+    console.log('animation', animation)
+
     actions[animation]?.reset().fadeIn(0.2).play();
 
     return () => { actions[animation]?.fadeOut(0.2) };

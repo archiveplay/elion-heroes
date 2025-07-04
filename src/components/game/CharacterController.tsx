@@ -2,14 +2,17 @@ import { useRef, useState } from "react"
 import { Group } from "three"
 import { CapsuleCollider, RapierRigidBody, RigidBody } from "@react-three/rapier"
 import { Warior } from "@/components/game/units/Warior"
-import { isHost, Joystick, PlayerState } from "playroomkit"
+import { isHost, Joystick, myPlayer, PlayerState } from "playroomkit"
 import { CameraControls, Text } from "@react-three/drei"
 import { usePlayerMovement } from "@/hooks/game/player/usePlayerMovement"
 import { usePlayerTarget } from "@/hooks/game/player/usePlayerTarget"
 import { useSaveUnitsRefsToStore } from "@/hooks/store/useSaveUnitsRefsToStore"
+import { usePlayerAttack } from "@/hooks/game/player/usePlayerAttack"
+import { GamePlayer } from "@/types/game/unit"
 
 interface CharacterControllProps {
   state: PlayerState,
+  players: GamePlayer[]
   joystick: Joystick,
   userPlayer: boolean,
   highlight: boolean,
@@ -17,13 +20,17 @@ interface CharacterControllProps {
   targetId?: string
 }
 
-export const CharacterControll = ({ state, joystick, userPlayer, highlight, setTargetId, targetId, ...props }: CharacterControllProps) => {
+export const CharacterControll = ({ state, players, joystick, userPlayer, highlight, setTargetId, targetId, ...props }: CharacterControllProps) => {
   const groupRef = useRef<Group>(null)
   const rigidBodyRef = useRef<RapierRigidBody>(null)
   const controlsRef = useRef<CameraControls>(null)
   const [animation, setAnimation] = useState("Idle")
 
-  const { enemies } = useSaveUnitsRefsToStore({ state, rigidBodyRef })
+  const { enemyRefs } = useSaveUnitsRefsToStore({ state, rigidBodyRef })
+
+  const enemies = players
+    .filter(({ state }) =>
+      state.id !== myPlayer().id)
 
   usePlayerMovement({
     controlsRef,
@@ -38,8 +45,19 @@ export const CharacterControll = ({ state, joystick, userPlayer, highlight, setT
     joystick,
     setAnimation,
     rigidBodyRef,
+    enemies: enemyRefs,
+    onSetTarget: (targetId) => {
+      // change target for local state
+      setTargetId(targetId)
+      state.setState("targetId", targetId)
+    }
+  })
+
+  usePlayerAttack({
+    rigidBodyRef,
+    state,
     enemies,
-    onSetTarget: setTargetId
+    setAnimation,
   })
 
   return (
